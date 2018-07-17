@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Building : MonoBehaviour
+public class Building : NetworkBehaviour
 {
     GameObject collided;
 
@@ -12,12 +13,35 @@ public class Building : MonoBehaviour
         {
             transform.SetParent(collided.transform);
 
-            Vector3 movePos = collided.transform.position;
-            movePos.y += 0.5f;
-
-            transform.position = movePos;
+			transform.position = collided.transform.position;
 
             collided.GetComponent<Collider>().isTrigger = false;
+
+			Player[] players = GameObject.FindObjectsOfType<Player>();
+			for (int x = 0; x < players.Length; x++)
+			{
+				if (players[x].GetComponent<NetworkIdentity>().hasAuthority)
+				{
+					BuildPoint bp = collided.GetComponent<BuildPoint>();
+					string name = gameObject.name;
+
+					switch (bp.buildID)
+					{
+						case 0:
+							players[x].build1 = (GameObject)Resources.Load(gameObject.name);
+							break;
+						case 1:
+							players[x].build2 = (GameObject)Resources.Load(gameObject.name);
+							break;
+						case 2:
+							players[x].build3 = (GameObject)Resources.Load(gameObject.name);
+							break;
+						case 3:
+							players[x].build4 = (GameObject)Resources.Load(gameObject.name);
+							break;
+					}
+				}
+			}
         }
         else
         {
@@ -27,7 +51,7 @@ public class Building : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.name.Contains("Build Point"))
+        if (other.name.Contains("BuildPoint"))
         {
             collided = other.gameObject;
         }

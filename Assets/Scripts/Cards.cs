@@ -2,7 +2,12 @@
 
 public class Cards : MonoBehaviour
 {
-    public Animator a;
+	Animator a;
+
+	private void Start()
+	{
+		a = GetComponent<Animator>();
+	}
 
 	public void OpenHand()
     {
