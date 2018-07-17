@@ -10,13 +10,22 @@ public class Player : NetworkBehaviour
     public GameObject minion;
     public const int maxHealth = 100;
 
-    [SyncVar]
-    public int health;
-    public RectTransform healthbar;
+    [SyncVar(hook = "OnChangeHealth")]
+    public int health = maxHealth;
+    public Slider healthbar;
+
+	[SyncVar]
+	public GameObject build1;
+	[SyncVar]
+	public GameObject build2;
+	[SyncVar]
+	public GameObject build3;
+	[SyncVar]
+	public GameObject build4;
 
 	void Start()
     {
-        health = maxHealth;
+
 	}
 
     void Update()
@@ -38,13 +47,11 @@ public class Player : NetworkBehaviour
         {
             CmdSpawnMinion();
         }
-
-        healthbar.sizeDelta = new Vector2(health, healthbar.sizeDelta.y);
     }
 
     void OnChangeHealth(int currentHealth)
     {
-
+        healthbar.value = currentHealth;
     }
 
     public void TakeDamage(int damage)
@@ -71,8 +78,13 @@ public class Player : NetworkBehaviour
     [Command]
     void CmdSpawnMinion()
     {
+        //find spawn point
         GameObject point = GameObject.FindGameObjectWithTag("SpawnPoint");
+
+        //spawn minion
         GameObject a = Instantiate(minion, point.transform.position, point.transform.rotation);
+
+        //spawn it on the network
         NetworkServer.Spawn(a);
     }
 }

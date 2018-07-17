@@ -17,10 +17,13 @@ public class Minion : MonoBehaviour
         //transform.Translate(Vector3.forward * 2 * Time.deltaTime);
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
+        if (other.gameObject.GetComponent<Player>())
+        {
+            Destroy(gameObject);
 
-        collision.gameObject.GetComponent<Player>().TakeDamage(10);
+            other.gameObject.GetComponent<Player>().TakeDamage(10);
+        }
     }
 }
