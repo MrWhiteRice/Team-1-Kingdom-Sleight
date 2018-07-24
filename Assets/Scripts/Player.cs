@@ -12,14 +12,9 @@ public class Player : NetworkBehaviour
 
     [SyncVar(hook = "OnChangeHealth")]
     public int health = maxHealth;
+
+    public string placedBuilding = "";
     public Slider healthbar;
-
-	public GameObject build1;
-	public GameObject build2;
-	public GameObject build3;
-	public GameObject build4;
-
-    public bool isMine;
 
 	void Start()
     {
@@ -29,17 +24,12 @@ public class Player : NetworkBehaviour
     void Update()
     {
         //if this is not the local player, dont();
-        if (!isLocalPlayer)
+        if (!hasAuthority)
         {
             return;
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-
-        Vector3 dir = new Vector3(x, 0, y).normalized;
-
-        transform.Translate(dir * Time.deltaTime * speed);
+        //else, do shit
 
         //spawn
         if (Input.GetKeyDown(KeyCode.F))
@@ -55,12 +45,10 @@ public class Player : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (!isServer)
+        if (isServer)
         {
-            return;
+            health -= damage;
         }
-
-        health -= damage;
 
         if (health <= 0)
         {
@@ -72,9 +60,10 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         GetComponentInChildren<Renderer>().material.color = Color.blue;
-        isMine = true;
+        tag = "MyPlayer";
     }
 
+    //tells server to spawn minion
     [Command]
     void CmdSpawnMinion()
     {
@@ -86,5 +75,12 @@ public class Player : NetworkBehaviour
 
         //spawn it on the network
         NetworkServer.Spawn(a);
+    }
+
+    [Command]
+    public void CmdSpawnBuilding(string name, Vector3 pos)
+    {
+        GameObject go = Instantiate((GameObject)Resources.Load("Buildings/" + name), pos, Quaternion.identity);
+        NetworkServer.SpawnWithClientAuthority(go, connectionToClient);
     }
 }

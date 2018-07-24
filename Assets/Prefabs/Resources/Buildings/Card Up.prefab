@@ -36,10 +36,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4194920076202602}
-  - component: {fileID: 114123454431433348}
   - component: {fileID: 54424273985793460}
   - component: {fileID: 65220549095012684}
-  - component: {fileID: 114540777715171384}
+  - component: {fileID: 114774095865427878}
   m_Layer: 2
   m_Name: Card Up
   m_TagString: Untagged
@@ -248,18 +247,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.6, z: 0.4}
   m_Center: {x: 0, y: 0.3, z: 0}
---- !u!114 &114123454431433348
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1393161767119840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8657201dd714f9d478b9009d0d45a74f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114540777715171384
+--- !u!114 &114774095865427878
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -290,4 +278,4 @@ MonoBehaviour:
     i14: 44
     i15: 132
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1

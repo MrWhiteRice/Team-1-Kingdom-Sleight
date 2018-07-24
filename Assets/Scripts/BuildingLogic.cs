@@ -6,22 +6,14 @@ using UnityEngine.Networking;
 public class BuildingLogic : NetworkBehaviour
 {
     GameObject grabbedObject;
-    GameObject placedObject;
+    string objectName;
+
     Vector3 position;
     Camera cam;
-
-    bool isMine;
 
     void Start()
     {
         cam = GameObject.FindObjectOfType<Camera>();
-
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-
-        isMine = true;
     }
 
     void Update()
@@ -51,6 +43,7 @@ public class BuildingLogic : NetworkBehaviour
     {
         GameObject item = (GameObject)Resources.Load("Buildings/" + name);
         grabbedObject = Instantiate(item);
+        objectName = name;
     }
 
     public void ReleaseMouse()
@@ -66,15 +59,12 @@ public class BuildingLogic : NetworkBehaviour
                 print("Valid Position");
                 grabbedObject.transform.SetParent(hit.transform);
                 grabbedObject.transform.position = hit.transform.position;
-                placedObject = grabbedObject;
+
+                //build object
+                GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
+                player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position);
+
                 grabbedObject = null;
-
-                if (!isClient)
-                {
-                    return;
-                }
-
-                RpcBuild();
             }
             else
             {
@@ -82,13 +72,5 @@ public class BuildingLogic : NetworkBehaviour
                 Object.Destroy(grabbedObject);
             }
         }
-    }
-
-    [RPC]
-    public void RpcBuild()
-    {
-        print("Build!");
-
-        NetworkServer.Spawn(placedObject);
     }
 }
