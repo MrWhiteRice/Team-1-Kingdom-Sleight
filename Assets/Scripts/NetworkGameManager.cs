@@ -2,31 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
-public class NetworkGameManager : NetworkBehaviour
+public class NetworkGameManager : NetworkManager
 {
-    [SyncVar]
-    public float time = 10;
-
-	void Start()
+    int port = 0000;
+    string ip = "LocalHost";
+    
+    //******************* HOST *********************
+    public void StartupHost()
     {
-		
-	}
-	
-	void Update()
+        SetPort(port);
+        NetworkManager.singleton.StartHost();
+    }
+
+    //******************* JOIN *********************
+    public void JoinGame()
     {
-        //if we're not the server, go away
-        if (!isServer)
-        {
-            return;
-        }
+        SetIPAddress();
+        SetPort(port);
+        NetworkManager.singleton.StartClient();
+    }
 
-        //if we are the server, count n shit
-        time -= Time.deltaTime;
+    //******************* SETTERS *********************
+    void SetPort(int port)
+    {
+        NetworkManager.singleton.networkPort = port;
+    }
 
-        if (time <= 0)
-        {
-            
-        }
-	}
+    void SetIPAddress()
+    {
+        NetworkManager.singleton.networkAddress = ip;
+    }
 }
