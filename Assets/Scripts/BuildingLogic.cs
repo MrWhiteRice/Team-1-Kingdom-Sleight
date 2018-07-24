@@ -6,12 +6,22 @@ using UnityEngine.Networking;
 public class BuildingLogic : NetworkBehaviour
 {
     GameObject grabbedObject;
+    GameObject placedObject;
     Vector3 position;
     Camera cam;
+
+    bool isMine;
 
     void Start()
     {
         cam = GameObject.FindObjectOfType<Camera>();
+
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        isMine = true;
     }
 
     void Update()
@@ -56,7 +66,8 @@ public class BuildingLogic : NetworkBehaviour
                 print("Valid Position");
                 grabbedObject.transform.SetParent(hit.transform);
                 grabbedObject.transform.position = Vector3.zero;
-                //grabbedObject.transform.SetParent(null);
+                placedObject = grabbedObject;
+                grabbedObject = null;
 
                 if (!isClient)
                 {
@@ -77,8 +88,7 @@ public class BuildingLogic : NetworkBehaviour
     public void RpcBuild()
     {
         print("Build!");
-        NetworkServer.Spawn(grabbedObject);
-        //grabbedObject.GetComponent<Building>().Build();
-        grabbedObject = null;
+
+        NetworkServer.Spawn(placedObject);
     }
 }
