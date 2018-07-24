@@ -12,7 +12,27 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Cube.003
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Base
+    second: {fileID: 2100000, guid: 8b075876e5e4cb1408e37f24bed8c674, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Other
+    second: {fileID: 2100000, guid: 64f31e01bbafa534c8e7913ea011626e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Team
+    second: {fileID: 2100000, guid: 91b5c547196a1a240ab97140790453c0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Terracotta
+    second: {fileID: 2100000, guid: 37af47fd9e281e1488e11ad466525a13, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

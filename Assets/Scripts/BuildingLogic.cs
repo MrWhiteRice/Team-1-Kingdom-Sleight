@@ -65,7 +65,7 @@ public class BuildingLogic : NetworkBehaviour
             {
                 print("Valid Position");
                 grabbedObject.transform.SetParent(hit.transform);
-                grabbedObject.transform.position = Vector3.zero;
+                grabbedObject.transform.position = hit.transform.position;
                 placedObject = grabbedObject;
                 grabbedObject = null;
 
@@ -84,7 +84,7 @@ public class BuildingLogic : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
+    [RPC]
     public void RpcBuild()
     {
         print("Build!");
