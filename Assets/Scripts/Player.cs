@@ -14,22 +14,21 @@ public class Player : NetworkBehaviour
     public int health = maxHealth;
     public Slider healthbar;
 
-	[SyncVar]
 	public GameObject build1;
-	[SyncVar]
 	public GameObject build2;
-	[SyncVar]
 	public GameObject build3;
-	[SyncVar]
 	public GameObject build4;
+
+    public bool isMine;
 
 	void Start()
     {
-
+        
 	}
 
     void Update()
     {
+        //if this is not the local player, dont();
         if (!isLocalPlayer)
         {
             return;
@@ -73,6 +72,7 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         GetComponentInChildren<Renderer>().material.color = Color.blue;
+        isMine = true;
     }
 
     [Command]

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Building : NetworkBehaviour
+public class WorldBuilder : NetworkBehaviour
 {
-    
+
 }
