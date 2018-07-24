@@ -6,14 +6,4 @@ public class BuildPoint : MonoBehaviour
 {
 	public bool isPlayer;
 	public int buildID;
-
-	void Start()
-	{
-
-	}
-	
-	void Update()
-	{
-
-	}
 }

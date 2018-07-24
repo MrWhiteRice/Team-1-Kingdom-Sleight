@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class BuildingLogic : MonoBehaviour
+public class BuildingLogic : NetworkBehaviour
 {
     GameObject grabbedObject;
     Vector3 position;
@@ -19,6 +20,7 @@ public class BuildingLogic : MonoBehaviour
         {
             int layer = LayerMask.GetMask("BuildRay");
 
+            //item placement
             RaycastHit hit;
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 50, layer))
@@ -27,6 +29,11 @@ public class BuildingLogic : MonoBehaviour
             }
 
             grabbedObject.transform.position = position;
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                ReleaseMouse();
+            }
         }
     }
 
@@ -36,9 +43,42 @@ public class BuildingLogic : MonoBehaviour
         grabbedObject = Instantiate(item);
     }
 
-    public void Build()
+    public void ReleaseMouse()
     {
-        grabbedObject.GetComponent<Building>().Build();
+        print("Released Mouse");
+
+        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 50))
+        {
+            if (hit.transform.gameObject.name.Contains("BuildPoint"))
+            {
+                print("Valid Position");
+                grabbedObject.transform.SetParent(hit.transform);
+                grabbedObject.transform.position = Vector3.zero;
+                //grabbedObject.transform.SetParent(null);
+
+                if (!isClient)
+                {
+                    return;
+                }
+
+                RpcBuild();
+            }
+            else
+            {
+                print("yeah naw");
+                Object.Destroy(grabbedObject);
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void RpcBuild()
+    {
+        print("Build!");
+        NetworkServer.Spawn(grabbedObject);
+        //grabbedObject.GetComponent<Building>().Build();
         grabbedObject = null;
     }
 }

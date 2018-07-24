@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 114123454431433348}
   - component: {fileID: 54424273985793460}
   - component: {fileID: 65220549095012684}
-  m_Layer: 0
+  - component: {fileID: 114573390768196768}
+  m_Layer: 2
   m_Name: Mana Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +40,7 @@ GameObject:
   - component: {fileID: 4473926177920618}
   - component: {fileID: 33708060147248814}
   - component: {fileID: 23160047369400742}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,3 +154,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8657201dd714f9d478b9009d0d45a74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114573390768196768
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1393161767119840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 134
+    i1: 117
+    i2: 239
+    i3: 93
+    i4: 23
+    i5: 153
+    i6: 141
+    i7: 36
+    i8: 75
+    i9: 82
+    i10: 22
+    i11: 185
+    i12: 211
+    i13: 196
+    i14: 24
+    i15: 247
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

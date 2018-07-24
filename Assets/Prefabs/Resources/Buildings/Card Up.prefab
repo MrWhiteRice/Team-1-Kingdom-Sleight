@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 114123454431433348}
   - component: {fileID: 54424273985793460}
   - component: {fileID: 65220549095012684}
-  m_Layer: 0
+  - component: {fileID: 114540777715171384}
+  m_Layer: 2
   m_Name: Card Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +40,7 @@ GameObject:
   - component: {fileID: 4473926177920618}
   - component: {fileID: 33708060147248814}
   - component: {fileID: 23160047369400742}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,3 +154,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8657201dd714f9d478b9009d0d45a74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114540777715171384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1393161767119840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 248
+    i1: 132
+    i2: 189
+    i3: 125
+    i4: 213
+    i5: 240
+    i6: 213
+    i7: 228
+    i8: 90
+    i9: 160
+    i10: 235
+    i11: 134
+    i12: 163
+    i13: 225
+    i14: 44
+    i15: 132
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
