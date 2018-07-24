@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 65220549095012684}
   - component: {fileID: 114018133765362644}
   m_Layer: 2
-  m_Name: Hand Up
+  m_Name: Cycling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
