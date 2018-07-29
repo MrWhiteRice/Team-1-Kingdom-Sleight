@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 54424273985793460}
   - component: {fileID: 65220549095012684}
   - component: {fileID: 114573390768196768}
+  - component: {fileID: 114691131057327396}
   m_Layer: 2
   m_Name: Mana Up
   m_TagString: Untagged
@@ -54,7 +55,7 @@ Transform:
   m_GameObject: {fileID: 1393161767119840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 5.93, z: 1}
   m_Children:
   - {fileID: 4473926177920618}
   m_Father: {fileID: 0}
@@ -174,3 +175,16 @@ MonoBehaviour:
     i15: 247
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114691131057327396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1393161767119840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e752ddab5100c2648adc08a18bb90c25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  pID: 

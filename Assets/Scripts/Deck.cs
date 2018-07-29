@@ -38,6 +38,8 @@ public class Deck : MonoBehaviour
 
 		print("card Drawn: " + cards[draw].name);
 
-		Object.Destroy(
+		//cards[draw] = null;
+
+
 	}
 }

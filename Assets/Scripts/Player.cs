@@ -40,7 +40,7 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
 		pID = System.Guid.NewGuid().ToString();
-        GetComponentInChildren<Renderer>().material.color = Color.blue;
+        //GetComponentInChildren<Renderer>().material.color = Color.blue;
         tag = "MyPlayer";
     }
 
