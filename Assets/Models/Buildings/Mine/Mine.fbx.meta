@@ -1,36 +1,30 @@
 fileFormatVersion: 2
-guid: 57e15b4126f5b02409babc046a518a6d
+guid: e26478d2af29629408287ef27edaca2c
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Terracotta
-    2100002: Base
-    2100004: Team
-    2100006: Other
-    2100008: Wood
+    2100000: Rock
+    2100002: Hole 1
+    2100004: Hole 2
+    2100006: Team
+    2100008: Base
+    2100010: Steel
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cube
-    7400000: Default Take
-    9500000: //RootNode
+    4300000: Icosphere
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Other
-    second: {fileID: 2100000, guid: 64f31e01bbafa534c8e7913ea011626e, type: 2}
+      name: Rock
+    second: {fileID: 2100000, guid: 962f3f3960e16804aa188687b8b06920, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Team
     second: {fileID: 2100000, guid: 91b5c547196a1a240ab97140790453c0, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Terracotta
-    second: {fileID: 2100000, guid: 37af47fd9e281e1488e11ad466525a13, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -105,7 +99,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 780e578f6b9f60343bb045f3c245a968
+guid: e13d777ffe5781f46a29d77f549b0b60
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -13,11 +13,6 @@ ModelImporter:
     3300000: //RootNode
     4300000: Cube.003
   externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Base
-    second: {fileID: 2100000, guid: 8b075876e5e4cb1408e37f24bed8c674, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
