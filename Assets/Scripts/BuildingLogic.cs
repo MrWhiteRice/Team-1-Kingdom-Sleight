@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
-public class BuildingLogic : NetworkBehaviour
+public class BuildingLogic : MonoBehaviour
 {
     GameObject grabbedObject;
     string objectName;
@@ -43,6 +42,7 @@ public class BuildingLogic : NetworkBehaviour
     {
         GameObject item = (GameObject)Resources.Load("Buildings/" + name);
         grabbedObject = Instantiate(item);
+		grabbedObject.GetComponent<Building>().enabled = false;
         objectName = name;
     }
 
@@ -54,16 +54,19 @@ public class BuildingLogic : NetworkBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 50))
         {
-            if (hit.transform.gameObject.name.Contains("BuildPoint"))
+            if (hit.transform.gameObject.name.Contains("BuildPoint") && hit.transform.GetComponent<BuildPoint>().isPlayer)
             {
                 print("Valid Position");
-                grabbedObject.transform.SetParent(hit.transform);
+				hit.transform.gameObject.layer = 2;
+
+				grabbedObject.transform.SetParent(hit.transform);
                 grabbedObject.transform.position = hit.transform.position;
 
-                //build object
-                GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
-                player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position);
+				//build object
+				GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
+                player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position, hit.transform.GetComponent<BuildPoint>().buildID, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID);
 
+				Object.Destroy(grabbedObject);
                 grabbedObject = null;
             }
             else
