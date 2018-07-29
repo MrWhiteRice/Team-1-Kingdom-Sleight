@@ -6,20 +6,16 @@ using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 {
-    float speed = 5;
-    public GameObject minion;
     public const int maxHealth = 100;
 
     [SyncVar(hook = "OnChangeHealth")]
     public int health = maxHealth;
 
+	[SyncVar]
+	public string pID;
+
     public string placedBuilding = "";
     public Slider healthbar;
-
-	void Start()
-    {
-        
-	}
 
     void Update()
     {
@@ -30,12 +26,10 @@ public class Player : NetworkBehaviour
         }
 
         //else, do shit
-
-        //spawn
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            CmdSpawnMinion();
-        }
+		if(Input.GetKeyDown(KeyCode.F))
+		{
+			CmdTakeDamage();
+		}
     }
 
     void OnChangeHealth(int currentHealth)
@@ -43,24 +37,17 @@ public class Player : NetworkBehaviour
         healthbar.value = currentHealth;
     }
 
-    public void TakeDamage(int damage)
-    {
-        if (isServer)
-        {
-            health -= damage;
-        }
-
-        if (health <= 0)
-        {
-            health = 0;
-            print("dis nibba dead");
-        }
-    }
-
     public override void OnStartLocalPlayer()
     {
-        GetComponentInChildren<Renderer>().material.color = Color.blue;
+		pID = System.Guid.NewGuid().ToString();
+        //GetComponentInChildren<Renderer>().material.color = Color.blue;
         tag = "MyPlayer";
+    }
+
+	[Command]
+	void CmdTakeDamage()
+    {
+		health -= 10;
     }
 
     //tells server to spawn minion
@@ -71,16 +58,23 @@ public class Player : NetworkBehaviour
         GameObject point = GameObject.FindGameObjectWithTag("SpawnPoint");
 
         //spawn minion
-        GameObject a = Instantiate(minion, point.transform.position, point.transform.rotation);
+        GameObject a = (GameObject)Instantiate((GameObject)Resources.Load("Minion"), point.transform.position, point.transform.rotation);
 
         //spawn it on the network
         NetworkServer.Spawn(a);
     }
 
+	//tell server to spawn building
     [Command]
-    public void CmdSpawnBuilding(string name, Vector3 pos)
+    public void CmdSpawnBuilding(string name, Vector3 pos, int point, string id)
     {
-        GameObject go = Instantiate((GameObject)Resources.Load("Buildings/" + name), pos, Quaternion.identity);
-        NetworkServer.SpawnWithClientAuthority(go, connectionToClient);
+		//physically spawn the object
+		GameObject go = Instantiate((GameObject)Resources.Load("Buildings/" + name), pos, Quaternion.identity);
+
+		go.GetComponent<Building>().id = point;
+		go.GetComponent<Building>().pID = id;
+		
+		//setPosition
+		NetworkServer.SpawnWithClientAuthority(go, connectionToClient);
     }
 }

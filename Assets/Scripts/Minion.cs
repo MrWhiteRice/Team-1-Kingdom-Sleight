@@ -19,11 +19,6 @@ public class Minion : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Player>())
-        {
-            Destroy(gameObject);
 
-            other.gameObject.GetComponent<Player>().TakeDamage(10);
-        }
     }
 }
