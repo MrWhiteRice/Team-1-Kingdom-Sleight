@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 837456817a1008340b34fb5e21d7107d
+guid: 7fde0c5516b727b48a5cd1afbfd61a6f
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Gamefont
+  fontName: Fontv3
   fontNames:
-  - Gamefont
+  - Fontv3
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
