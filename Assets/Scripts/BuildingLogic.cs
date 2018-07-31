@@ -10,13 +10,25 @@ public class BuildingLogic : MonoBehaviour
     Vector3 position;
     Camera cam;
 
-    void Start()
-    {
-        cam = GameObject.FindObjectOfType<Camera>();
-    }
-
     void Update()
     {
+		Player p = null;
+
+		if(GameObject.FindGameObjectWithTag("MyPlayer"))
+		{
+			p = GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>();
+
+			if(p.isMain)
+			{
+				cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+			}
+
+			if(!p.isMain)
+			{
+				cam = GameObject.Find("Opponent Camera").GetComponent<Camera>();
+			}
+		}
+
         if (grabbedObject != null)
         {
             int layer = LayerMask.GetMask("BuildRay");
@@ -54,20 +66,49 @@ public class BuildingLogic : MonoBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 50))
         {
-            if (hit.transform.gameObject.name.Contains("BuildPoint") && hit.transform.GetComponent<BuildPoint>().isPlayer)
+            if (hit.transform.gameObject.name.Contains("BuildPoint"))
             {
-                print("Valid Position");
-				hit.transform.gameObject.layer = 2;
+				//main
+				if(hit.transform.GetComponent<BuildPoint>().isPlayer)
+				{
+					if(GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
+					{
+						print("main");
+						hit.transform.gameObject.layer = 2;
 
-				grabbedObject.transform.SetParent(hit.transform);
-                grabbedObject.transform.position = hit.transform.position;
+						grabbedObject.transform.SetParent(hit.transform);
+						grabbedObject.transform.position = hit.transform.position;
+						grabbedObject.transform.rotation = hit.transform.rotation;
 
-				//build object
-				GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
-                player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position, hit.transform.GetComponent<BuildPoint>().buildID, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID);
+						//build object
+						GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
+						player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position);
 
-				Object.Destroy(grabbedObject);
-                grabbedObject = null;
+						Object.Destroy(grabbedObject);
+						grabbedObject = null;
+					}
+				}
+				else
+				{
+					if(!GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
+					{
+						print("not main");
+						hit.transform.gameObject.layer = 2;
+
+						grabbedObject.transform.SetParent(hit.transform);
+						grabbedObject.transform.position = hit.transform.position;
+						grabbedObject.transform.rotation = hit.transform.rotation;
+
+						//build object
+						GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
+						player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position);
+
+						Object.Destroy(grabbedObject);
+						grabbedObject = null;
+					}
+				}
+
+                Object.Destroy(grabbedObject);
             }
             else
             {

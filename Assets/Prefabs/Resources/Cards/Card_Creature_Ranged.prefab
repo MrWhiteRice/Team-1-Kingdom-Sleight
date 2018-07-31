@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -111,9 +111,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d20968e46abe845956ea2250c82eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardImage: {fileID: 114581479280232742}
+  text: {fileID: 114199272143666734}
   cardName: Creature_Ranged
   cost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
+  type: 0
 --- !u!114 &114365588333658388
 MonoBehaviour:
   m_ObjectHideFlags: 1

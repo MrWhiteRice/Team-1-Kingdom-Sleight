@@ -8,7 +8,7 @@ public class Player : NetworkBehaviour
 {
     public const int maxHealth = 100;
 
-    [SyncVar(hook = "OnChangeHealth")]
+	[SyncVar]
     public int health = maxHealth;
 
 	[SyncVar]
@@ -16,6 +16,18 @@ public class Player : NetworkBehaviour
 
     public string placedBuilding = "";
     public Slider healthbar;
+
+	public bool isMain;
+
+	void Start()
+	{
+		if(isLocalPlayer)
+		{
+			return;
+		}
+
+		tag = "EnemyPlayer";
+	}
 
     void Update()
     {
@@ -28,51 +40,84 @@ public class Player : NetworkBehaviour
         //else, do shit
 		if(Input.GetKeyDown(KeyCode.F))
 		{
-			CmdTakeDamage();
+			CmdTakeDamage(10, pID);
 		}
     }
 
-    void OnChangeHealth(int currentHealth)
-    {
-        healthbar.value = currentHealth;
-    }
-
-    public override void OnStartLocalPlayer()
-    {
+	public override void OnStartLocalPlayer()
+	{
 		pID = System.Guid.NewGuid().ToString();
-        //GetComponentInChildren<Renderer>().material.color = Color.blue;
-        tag = "MyPlayer";
+		CmdSetID(pID);
+		tag = "MyPlayer";
+
+		if(isServer)
+		{
+			GameObject.Find("Opponent Camera").SetActive(false);
+			isMain = true;
+			return;
+		}
+		else
+		{
+			print("im the away player");
+			GameObject.Find("Main Camera").SetActive(false);
+			isMain = false;
+		}
+	}
+
+	//takes damage
+	[Command]
+	public void CmdTakeDamage(int damage, string id)
+    {
+        if (pID != id)
+        {
+			print("i took damage!");
+            health -= damage;
+        }
     }
 
 	[Command]
-	void CmdTakeDamage()
-    {
-		health -= 10;
-    }
+	void CmdSetID(string id)
+	{
+		pID = id;
+	}
 
     //tells server to spawn minion
     [Command]
-    void CmdSpawnMinion()
+    public void CmdSpawnMinion(Vector3 pos, Vector3 rot, string spawnName, bool main)
     {
-        //find spawn point
-        GameObject point = GameObject.FindGameObjectWithTag("SpawnPoint");
-
         //spawn minion
-        GameObject a = (GameObject)Instantiate((GameObject)Resources.Load("Minion"), point.transform.position, point.transform.rotation);
+        GameObject a = (GameObject)Instantiate((GameObject)Resources.Load("Units/" + spawnName));
+
+		a.transform.position = pos;
+		a.transform.eulerAngles = rot;
+		a.GetComponent<Minion>().main = main;
 
         //spawn it on the network
         NetworkServer.Spawn(a);
     }
 
+	[Command]
+	public void CmdSpawnSpell(Vector3 pos, Vector3 rot, string spawnName)
+	{
+		//spawn spell
+        GameObject a = (GameObject)Instantiate((GameObject)Resources.Load("Spells/" + spawnName));
+
+		a.transform.position = pos;
+		a.transform.eulerAngles = rot;
+
+        //spawn it on the network
+        NetworkServer.Spawn(a);
+	}
+
 	//tell server to spawn building
     [Command]
-    public void CmdSpawnBuilding(string name, Vector3 pos, int point, string id)
+    public void CmdSpawnBuilding(string name, Vector3 pos)
     {
 		//physically spawn the object
 		GameObject go = Instantiate((GameObject)Resources.Load("Buildings/" + name), pos, Quaternion.identity);
 
-		go.GetComponent<Building>().id = point;
-		go.GetComponent<Building>().pID = id;
+		//go.GetComponent<Building>().id = point;
+		//go.GetComponent<Building>().pID = id;
 		
 		//setPosition
 		NetworkServer.SpawnWithClientAuthority(go, connectionToClient);

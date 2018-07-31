@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SpawnPoint
   - MyPlayer
+  - EnemyPlayer
   layers:
   - Default
   - TransparentFX

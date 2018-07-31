@@ -55,7 +55,6 @@ GameObject:
   - component: {fileID: 114873129540006994}
   - component: {fileID: 114770916593694382}
   - component: {fileID: 114959172397535664}
-  - component: {fileID: 65871629386856904}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -200,18 +199,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1821803544078232}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65871629386856904
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1473688019457104}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114019010957476678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -297,6 +284,7 @@ MonoBehaviour:
   pID: 
   placedBuilding: 
   healthbar: {fileID: 114791610331304528}
+  isMain: 0
 --- !u!114 &114791610331304528
 MonoBehaviour:
   m_ObjectHideFlags: 1
