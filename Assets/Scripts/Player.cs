@@ -37,12 +37,25 @@ public class Player : NetworkBehaviour
             return;
         }
 
-        //else, do shit
-		if(Input.GetKeyDown(KeyCode.F))
+		//a p g backspace alt
+		if (Input.GetKey(KeyCode.A))
 		{
-			CmdTakeDamage(10, pID);
+			if (Input.GetKey(KeyCode.P))
+			{
+				if (Input.GetKey(KeyCode.G))
+				{
+					if (Input.GetKey(KeyCode.L))
+					{
+						if (Input.GetKeyDown(KeyCode.Alpha0))
+						{
+							GameObject.FindObjectOfType<Sliders>().mana.value = 100;
+							GameObject.FindObjectOfType<Sliders>().card.value = 100;
+						}
+					}
+				}
+			}
 		}
-    }
+	}
 
 	public override void OnStartLocalPlayer()
 	{
@@ -64,15 +77,23 @@ public class Player : NetworkBehaviour
 		}
 	}
 
-	//takes damage
+	//deals damage
 	[Command]
-	public void CmdTakeDamage(int damage, string id)
+	public void CmdDealDamage(int damage, GameObject player)
+	{
+		if(!isServer)
+		{
+			return;
+		}
+
+		player.GetComponent<Player>().RpcTakeDamage(damage);
+	}
+
+	//takes damage
+	[ClientRpc]
+	public void RpcTakeDamage(int damage)
     {
-        if (pID != id)
-        {
-			print("i took damage!");
-            health -= damage;
-        }
+		health -= damage;
     }
 
 	[Command]
@@ -90,6 +111,7 @@ public class Player : NetworkBehaviour
 
 		a.transform.position = pos;
 		a.transform.eulerAngles = rot;
+		print(main);
 		a.GetComponent<Minion>().main = main;
 
         //spawn it on the network
@@ -111,13 +133,13 @@ public class Player : NetworkBehaviour
 
 	//tell server to spawn building
     [Command]
-    public void CmdSpawnBuilding(string name, Vector3 pos)
+    public void CmdSpawnBuilding(string name, Vector3 pos, string id)
     {
 		//physically spawn the object
 		GameObject go = Instantiate((GameObject)Resources.Load("Buildings/" + name), pos, Quaternion.identity);
 
 		//go.GetComponent<Building>().id = point;
-		//go.GetComponent<Building>().pID = id;
+		go.GetComponent<Building>().pID = id;
 		
 		//setPosition
 		NetworkServer.SpawnWithClientAuthority(go, connectionToClient);

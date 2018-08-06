@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4078747385790296}
   - component: {fileID: 114779229819969070}
   - component: {fileID: 65912261823831820}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CardPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,5 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc2e4c5cc07def4abc1d48ecdb5063f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lane: 0
   isPlayer: 1
   buildID: 0

@@ -8,9 +8,13 @@ public class Deck : MonoBehaviour
 
 	public GameObject[] cards = new GameObject[20];
 
+	public GameObject[] graveyard = new GameObject[20];
+
 	public GameObject[] usingCards;
 
 	public GameObject[] hand;
+
+	public bool GraveShifted;
 
 	void Start()
 	{
@@ -38,10 +42,35 @@ public class Deck : MonoBehaviour
 		}
 	}
 
+	public void MoveGrave()
+	{
+		print("moved the graveyard!");
+
+		usingCards = new GameObject[graveyard.Length];
+
+		for (int x = 0; x < graveyard.Length; x++)
+		{
+			usingCards[x] = graveyard[x];
+		}
+
+		graveyard = new GameObject[20];
+
+		GraveShifted = true;
+
+		DrawCard();
+	}
+
 	public void DrawCard()
 	{
+		if(usingCards.Length <= 0)
+		{
+			MoveGrave();
+			return;
+		}
+
 		//select a card
 		int draw = Random.Range(0, usingCards.Length);
+		int graveSelect = -1;
 
 		//cycle through hand
 		for(int x = 0; x < hand.Length; x++)
@@ -49,17 +78,40 @@ public class Deck : MonoBehaviour
 			//find next empty
 			if(hand[x] == null)
 			{
-				//add card to hand
-				hand[x] = usingCards[draw];
+				if (GraveShifted)
+				{
+					//add next
+					for (int i = 0; i < usingCards.Length; i++)
+					{
+						if (usingCards[i] != null)
+						{
+							hand[x] = usingCards[i];
+							graveSelect = i;
+							break;
+						}
+					}
+				}
+				else
+				{
+					//add card to hand
+					hand[x] = usingCards[draw];
+				}
 
 				//spawn object in hand
 				GameObject card = Instantiate(hand[x]);
-				card.transform.SetParent(grabbyHand.transform);
+				card.transform.SetParent(grabbyHand.transform, false);
 
 				card.GetComponent<CardLogic>().ID = x;
 
 				//clear the card
-				usingCards[draw] = null;
+				if (GraveShifted)
+				{
+					usingCards[graveSelect] = null;
+				}
+				else
+				{
+					usingCards[draw] = null;
+				}
 
 				//generate a temp deck thats 1 length shorter
 				GameObject[] tempDeck = new GameObject[usingCards.Length - 1];

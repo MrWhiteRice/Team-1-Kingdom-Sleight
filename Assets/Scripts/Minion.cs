@@ -12,13 +12,20 @@ public class Minion : NetworkBehaviour
     [SyncVar]
     public string pID;
 
+	public int health;
+	public int damage;
+
     public int position;
     GameObject moveTile;
-    public float gen = 1;
+
+	public float baseSpeed;
+	public float slowCounts = 0;
 
 	public bool main;
 
-    public enum Lane
+	GameObject iceObject;
+
+	public enum Lane
     {
         left,
         middle,
@@ -46,19 +53,20 @@ public class Minion : NetworkBehaviour
                     lane = Lane.right;
                     break;
             }
+
+			position = hit.transform.GetComponent<CardPoint>().buildID;
         }
 
         //if opponent rotate
-        if (!isServer)
+        if (main)
         {
-            position = 2;
-            transform.Rotate(Vector3.up * 180);
-			return;
-        }
-        else
+            //position = 0;
+		}
+		else
         {
-            position = 0;
-        }
+			//position = 2;
+			transform.Rotate(Vector3.up * 180);
+		}
     }
 
     void Update()
@@ -68,9 +76,30 @@ public class Minion : NetworkBehaviour
 			return;
 		}
 
-        GetComponentInChildren<Slider>().value += Time.deltaTime * gen;
+        GetComponentInChildren<Slider>().value += Time.deltaTime;
 
-        if (moveTile != null)
+		if(health <= 0)
+		{
+			Die();
+		}
+
+		if (iceObject != null)
+		{
+			GetComponentInChildren<Slider>().maxValue = baseSpeed;
+		}
+		else
+		{
+			if (slowCounts <= 4)
+			{
+				GetComponentInChildren<Slider>().maxValue = baseSpeed + (3 * slowCounts);
+			}
+			else
+			{
+				GetComponentInChildren<Slider>().maxValue = baseSpeed + (3 * 4);
+			}
+		}
+
+		if (moveTile != null)
         {
             transform.position = Vector3.Lerp(transform.position, moveTile.transform.position - transform.forward * 0.25f, Time.deltaTime * 2);
         }
@@ -86,14 +115,19 @@ public class Minion : NetworkBehaviour
     {
         //raycast forward | if hit object is less than 1 unit away | attack
         RaycastHit hit;
-        if (Physics.Raycast(new Ray(transform.position, transform.forward), out hit, 0.5f))
+        if (Physics.Raycast(new Ray(transform.position + (Vector3.up*0.25f), transform.forward), out hit, 1.5f))
         {
             print("123123123123" + hit.transform.name);
             if (hit.transform.name.Contains("Creature"))
             {
                 print("Fightin!");
+				hit.transform.GetComponent<Minion>().health -= damage;
                 return;
             }
+			else
+			{
+				Move();
+			}
         }
         else//else | move
         {
@@ -104,134 +138,108 @@ public class Minion : NetworkBehaviour
 
     private void Move()
     {
-        MoveTile[] tiles = GameObject.FindObjectsOfType<MoveTile>();
+		if (main)
+		{
+			position++;
+		}
+		else
+		{
+			position--;
+		}
 
-        for (int x = 0; x < tiles.Length; x++)
-        {
-            if (lane.ToString() == tiles[x].lane.ToString())
-            {
-                //move
-                //find correct number
-                if (tiles[x].position == position)
-                {
-                    moveTile = tiles[x].gameObject;
-                    if (main)
-                    {
-                        position++;
-                        return;
-                    }
-                    else
-                    {
-                        position--;
-                    }
-                    return;
-                }
+		print(position);
 
-                CardPoint[] cardPoints = GameObject.FindObjectsOfType<CardPoint>();
+		//find all tiles
+		MoveTile[] tiles = GameObject.FindObjectsOfType<MoveTile>();
 
-                //check if moving to opponent
-                if (isServer)
-                {
-                    //move to base
-                    if(position == 3)
-                    {
-                        print("At 3");
-                        for (int y = 0; y < cardPoints.Length; y++)
-                        {
-                            if (cardPoints[y].lane.ToString() == lane.ToString())
-                            {
-                                if (!cardPoints[y].isPlayer)
-                                {
-                                    moveTile = cardPoints[y].gameObject;
-                                    position++;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    //deal damage to base
-                    else if (position == 4)
-                    {
-                        print("at 4");
-                        DealDamage();
-                        return;
-                    }
-                }
-                else//opponent
-                {
-                    if (position == 0)
-                    {
-                        print("at 0");
-                        for (int y = 0; y < cardPoints.Length; y++)
-                        {
-                            if (cardPoints[y].lane.ToString() == lane.ToString())
-                            {
-                                if (cardPoints[y].isPlayer)
-                                {
-                                    moveTile = cardPoints[y].gameObject;
-                                    position--;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    else if(position == -1)
-                    {
-                        print("at -1 | DESTROYING NEXUS!");
-                        DealDamage();
-                        return;
-                    }
-                }
-            }
-        }
-    }
+		//cycle through them
+		for (int i = 0; i < tiles.Length; i++)
+		{
+			if (lane.ToString() == tiles[i].lane.ToString())
+			{
+				print("correctlane");
+				if (tiles[i].position == position)
+				{
+					moveTile = tiles[i].gameObject;
+					return;
+				}
+			}
+		}
 
-    private void OnTriggerEnter(Collider other)
+		CardPoint[] points = GameObject.FindObjectsOfType<CardPoint>();
+
+		for (int j = 0; j < points.Length; j++)
+		{
+			if (lane.ToString() == points[j].lane.ToString())
+			{
+				if (points[j].buildID == position)
+				{
+					moveTile = points[j].gameObject;
+					return;
+				}
+			}
+		}
+
+		if (main)
+		{
+			if (position == 4)
+			{
+				DealDamage(damage);
+			}
+		}
+		else
+		{
+			if (position == -2)
+			{
+				DealDamage(damage);
+			}
+		}
+	}
+
+    private void OnTriggerStay(Collider other)
     {
         if (other.name.Contains("Spell_Ice"))
         {
-            gen = 0.5f;
-        }
+			print("slowing down");
+			iceObject = other.transform.gameObject;
 
-        if (other.name.Contains("Spell_Lightning"))
+			if (slowCounts <= 4)
+			{
+				GetComponentInChildren<Slider>().maxValue = baseSpeed + (3 * slowCounts);
+			}
+			else
+			{
+				GetComponentInChildren<Slider>().maxValue = baseSpeed + (3 * 4);
+			}
+		}
+
+		if (other.name.Contains("Spell_Lightning"))
         {
 			//////////////////////
-			Die();
+			if(isServer)
+			{
+				Die();
+			}
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.name.Contains("Spell_Ice"))
-        {
-            gen = 1;
-        }
-
-        if (other.name.Contains("Spell_Lightning"))
-        {
-			///////////////////
-			Die();
-		}
     }
 
 	void Die()
 	{
-		Network.Destroy(gameObject);
+		NetworkServer.Destroy(this.gameObject);
 	}
 
-    void DealDamage()
+    void DealDamage(int dmg)
     {
-        NetworkServer.Destroy(gameObject);
+		Die();
 
-        if (isServer)
-        {
-            GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdTakeDamage(10, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID);
-            return;
-        }
-        else
-        {
-            GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdTakeDamage(10, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID);
-            return;
-        }
-    }
+		//main player
+		if(main)
+		{
+			GameObject.FindGameObjectWithTag("EnemyPlayer").GetComponent<Player>().RpcTakeDamage(dmg);
+		}
+		else
+		{
+			GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().RpcTakeDamage(dmg);
+		}
+	}
 }

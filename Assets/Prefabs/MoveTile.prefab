@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4053236223633300}
   - component: {fileID: 114721225886936462}
   - component: {fileID: 65801467902189720}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MoveTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

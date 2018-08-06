@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class CardLogic : MonoBehaviour
+public class CardLogic : NetworkBehaviour
 {
 	public Image cardImage;
 	public Text text;
+	public Text att;
+	public Text def;
+	public Text cmc;
 
-    public string cardName;
+	public string cardName;
     public int cost;
 
 	public GameObject card;
@@ -46,9 +50,46 @@ public class CardLogic : MonoBehaviour
 
 		cardImage.enabled = false;
 		text.enabled = false;
-        spawnedCard = Instantiate(card);
+		cmc.enabled = false;
 
-		if(!GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
+		if (att != null)
+			att.enabled = false;
+		if (def != null)
+			def.enabled = false;
+
+		spawnedCard = Instantiate(card);
+
+		if (type == CardType.creature)
+		{
+			//set data
+			spawnedCard.GetComponent<WorldCard>().desc_creature.text = text.text;
+			spawnedCard.GetComponent<WorldCard>().card_creature.sprite = cardImage.sprite;
+
+			//disable spell stuff
+			spawnedCard.GetComponent<WorldCard>().desc_spell.enabled = false;
+			spawnedCard.GetComponent<WorldCard>().card_spell.enabled = false;
+
+			//set creature data
+			spawnedCard.GetComponent<WorldCard>().attack.text = att.text;
+			spawnedCard.GetComponent<WorldCard>().health.text = def.text;
+		}
+		else if(type == CardType.spell)
+		{
+			//set data
+			spawnedCard.GetComponent<WorldCard>().desc_spell.text = text.text;
+			spawnedCard.GetComponent<WorldCard>().card_spell.sprite = cardImage.sprite;
+
+			//disable creature stuff
+			spawnedCard.GetComponent<WorldCard>().desc_creature.enabled = false;
+			spawnedCard.GetComponent<WorldCard>().card_creature.enabled = false;
+
+			spawnedCard.GetComponent<WorldCard>().attack.enabled = false;
+			spawnedCard.GetComponent<WorldCard>().health.enabled = false;
+		}
+		
+		spawnedCard.GetComponent<WorldCard>().cmc.text = cmc.text;
+
+		if (!GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
 		{
 			Vector3 rot = spawnedCard.GetComponent<RectTransform>().eulerAngles;
 			rot.y = 180;
@@ -63,46 +104,23 @@ public class CardLogic : MonoBehaviour
         {
             Ray ray = new Ray(spawnedCard.transform.position, Vector3.down);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 9))
+            if (Physics.Raycast(ray, out hit, 9, LayerMask.GetMask("Tile")))
             {
 				//******************** Creature ********************
 				if (hit.transform.GetComponent<CardPoint>())
 				{
-					//main player
-					if(hit.transform.GetComponent<CardPoint>().isPlayer)
+					if(GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
 					{
-						if(GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
+						if(type == CardType.creature)
 						{
-							if(GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
-							{
-								if(type == CardType.creature)
-								{
-									SpawnCreature(hit);
-								}
-							}
-						}
-						
-					}
-					else//secondary player
-					{
-						if(!GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
-						{
-							if(GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
-							{
-								if(type == CardType.creature)
-								{
-									SpawnCreature(hit);
-								}
-							}
+							SpawnCreature(hit);
 						}
 					}
 				}
 
 				//******************** Spell ********************
-				if (hit.transform.GetComponent<MoveTile>())
+				if (hit.transform.GetComponent<MoveTile>() || hit.transform.GetComponent<CardPoint>())
 				{
-					print("spell");
-
 					if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
 					{
 						if (type == CardType.spell)
@@ -113,12 +131,43 @@ public class CardLogic : MonoBehaviour
 				}
 			}
 
-            Destroy(spawnedCard);
+			Ray bray = new Ray(spawnedCard.transform.position + (Vector3.up * 2), Vector3.down);
+			RaycastHit bhit;
+			if (Physics.Raycast(bray, out bhit))
+			{
+				//******************** DISCARD ********************
+				if (bhit.transform.name.Contains("Cycling"))
+				{
+					//find next empty slot in grave
+					for (int x = 0; x < GameObject.FindObjectOfType<Deck>().graveyard.Length; x++)
+					{
+						if (GameObject.FindObjectOfType<Deck>().graveyard[x] == null)
+						{
+							GameObject.FindObjectOfType<Deck>().graveyard[x] = GameObject.FindObjectOfType<Deck>().hand[ID];
+							break;
+						}
+					}
+
+					GameObject.FindObjectOfType<Deck>().hand[ID] = null;
+					GameObject.FindObjectOfType<Sliders>().mana.value -= 10;
+
+					GameObject.FindObjectOfType<Deck>().DrawCard();
+					Destroy(gameObject);
+				}
+			}
+
+			Destroy(spawnedCard);
         }
 
         //else go back to hand
 		cardImage.enabled = true;
 		text.enabled = true;
+		cmc.enabled = true;
+
+		if (att != null)
+			att.enabled = true;
+		if (att != null)
+			def.enabled = true;
 	}
 
 	void SpawnCreature(RaycastHit hit)
@@ -128,15 +177,25 @@ public class CardLogic : MonoBehaviour
 		//set position
 		Vector3 spawnPoint = hit.transform.position;
 		spawnPoint.y = hit.point.y;
-
-		//spawn spell
-		GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSpawnMinion(hit.transform.position, hit.transform.eulerAngles, cardName, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain);
 		
 		//minus cost | clean up
 		GameObject.FindObjectOfType<Sliders>().mana.value -= cost;
 
+		//find next empty slot in grave
+		for (int x = 0; x < GameObject.FindObjectOfType<Deck>().graveyard.Length; x++)
+		{
+			if (GameObject.FindObjectOfType<Deck>().graveyard[x] == null)
+			{
+				GameObject.FindObjectOfType<Deck>().graveyard[x] = GameObject.FindObjectOfType<Deck>().hand[ID];
+				break;
+			}
+		}
+
 		Destroy(gameObject);
 		GameObject.FindObjectOfType<Deck>().hand[ID] = null;
+
+		//spawn spell
+		GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSpawnMinion(hit.transform.position, hit.transform.eulerAngles, cardName, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain);
 	}
 
 	void SpawnSpell(RaycastHit hit)
@@ -154,16 +213,17 @@ public class CardLogic : MonoBehaviour
 		GameObject.FindObjectOfType<Sliders>().mana.value -= cost;
 		Destroy(gameObject);
 
-		for (int x = 0; x < GameObject.FindObjectOfType<Deck>().hand.Length; x++)
+
+		//find next empty slot in grave
+		for(int x = 0; x < GameObject.FindObjectOfType<Deck>().graveyard.Length; x++)
 		{
-			if (GameObject.FindObjectOfType<Deck>().hand[x] != null)
+			if (GameObject.FindObjectOfType<Deck>().graveyard[x] == null)
 			{
-				if (name.Contains(GameObject.FindObjectOfType<Deck>().hand[x].name))
-				{
-					GameObject.FindObjectOfType<Deck>().hand[x] = null;
-					return;
-				}
+				GameObject.FindObjectOfType<Deck>().graveyard[x] = GameObject.FindObjectOfType<Deck>().hand[ID];
+				break;
 			}
 		}
+
+		GameObject.FindObjectOfType<Deck>().hand[ID] = null;
 	}
 }

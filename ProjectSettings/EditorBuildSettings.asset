@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/JK_Working Map.unity
     guid: d73818efb3ed1ae42aac0a842098955c
+  - enabled: 1
+    path: Assets/Scenes/LB_Forest Level.unity
+    guid: 867e3be231d512147bb450a5de8bf137
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: 5d06d5882c6507f4fa7da5b38764d08c
+  - enabled: 1
+    path: Assets/Scenes/Lose.unity
+    guid: 5fc58eae5fd74324fb2b650c8138fcab
   m_configObjects: {}

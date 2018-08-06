@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Sliders : MonoBehaviour
@@ -10,33 +11,59 @@ public class Sliders : MonoBehaviour
     public Slider playerHealth;
     public Slider enemyHealth;
 
-    public float cardGen = 5.0f;
-    public float manaGen = 5.0f;
+	[HideInInspector]
+    public float cardGen = 3.5f;
+	[HideInInspector]
+    public float manaGen = 2.5f;
 
-    public float cardRate = 2.5f;
-    public float manaRate = 5f;
-
-    float percentage = 3f;
+	[HideInInspector]
+    public float cardBuff = 0f;
+	[HideInInspector]
+    public float manaBuff = 0f;
     
 	void Update()
     {
-		if(GameObject.FindGameObjectWithTag("MyPlayer"))
+		if (GameObject.FindObjectOfType<NetworkGameManager>().canStart)
 		{
-			playerHealth.value = GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().health;
-		}
+			if (GameObject.FindGameObjectWithTag("MyPlayer"))
+			{
+				playerHealth.value = GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().health;
 
-		if(GameObject.FindGameObjectWithTag("EnemyPlayer"))
-		{
-			enemyHealth.value = GameObject.FindGameObjectWithTag("EnemyPlayer").GetComponent<Player>().health;
-		}
+				if(playerHealth.value <= 0)
+				{
+					SceneManager.LoadScene("Lose", LoadSceneMode.Single);
+					//NetworkGameManager.Disconnect();
+				}
+			}
 
-		card.value += (cardGen * cardRate * Time.deltaTime * percentage);
-        mana.value += (manaGen * manaRate * Time.deltaTime * percentage);
+			if (GameObject.FindGameObjectWithTag("EnemyPlayer"))
+			{
+				enemyHealth.value = GameObject.FindGameObjectWithTag("EnemyPlayer").GetComponent<Player>().health;
 
-		if(card.value == 100)
-		{
-			GameObject.FindObjectOfType<Deck>().DrawCard();
-			card.value = 0;
+				if(enemyHealth.value <= 0)
+				{
+					SceneManager.LoadScene("Win", LoadSceneMode.Single);
+					//etworkGameManager.Disconnect();
+				}
+			}
 		}
     }
+
+	private void LateUpdate()
+	{
+		if (GameObject.FindObjectOfType<NetworkGameManager>().canStart)
+		{
+			card.value += ((cardGen + cardBuff) * Time.deltaTime);
+			mana.value += ((manaGen + manaBuff) * Time.deltaTime);
+
+			if (card.value == 100)
+			{
+				GameObject.FindObjectOfType<Deck>().DrawCard();
+				card.value = 0;
+			}
+
+			cardBuff = 0;
+			manaBuff = 0;
+		}
+	}
 }

@@ -82,7 +82,7 @@ public class BuildingLogic : MonoBehaviour
 
 						//build object
 						GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
-						player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position);
+						player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position, player.GetComponent<Player>().pID);
 
 						Object.Destroy(grabbedObject);
 						grabbedObject = null;
@@ -101,7 +101,7 @@ public class BuildingLogic : MonoBehaviour
 
 						//build object
 						GameObject player = GameObject.FindGameObjectWithTag("MyPlayer");
-						player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position);
+						player.GetComponent<Player>().CmdSpawnBuilding(objectName, grabbedObject.transform.position, player.GetComponent<Player>().pID);
 
 						Object.Destroy(grabbedObject);
 						grabbedObject = null;
