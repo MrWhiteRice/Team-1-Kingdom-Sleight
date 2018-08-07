@@ -14,6 +14,7 @@ public class CardLogic : NetworkBehaviour
 
 	public string cardName;
     public int cost;
+	public int cycleCost = 20;
 
 	public GameObject card;
 	public static GameObject spawnedCard;
@@ -26,6 +27,11 @@ public class CardLogic : NetworkBehaviour
 		spell
 	};
 	public CardType type;
+
+	private void Start()
+	{
+		cmc.text = "" + (cost/10);
+	}
 
 	void Update()
 	{
@@ -109,11 +115,30 @@ public class CardLogic : NetworkBehaviour
 				//******************** Creature ********************
 				if (hit.transform.GetComponent<CardPoint>())
 				{
-					if(GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+					if (hit.transform.GetComponent<CardPoint>().isPlayer)
 					{
-						if(type == CardType.creature)
+						if (GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
 						{
-							SpawnCreature(hit);
+							if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+							{
+								if (type == CardType.creature)
+								{
+									SpawnCreature(hit);
+								}
+							}
+						}
+					}
+					else if (hit.transform.GetComponent<CardPoint>().isPlayer == false)
+					{
+						if (GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain == false)
+						{
+							if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+							{
+								if (type == CardType.creature)
+								{
+									SpawnCreature(hit);
+								}
+							}
 						}
 					}
 				}
@@ -121,6 +146,23 @@ public class CardLogic : NetworkBehaviour
 				//******************** Spell ********************
 				if (hit.transform.GetComponent<MoveTile>() || hit.transform.GetComponent<CardPoint>())
 				{
+					if (hit.transform.GetComponent<CardPoint>())
+					{
+						if (hit.transform.GetComponent<CardPoint>().isPlayer)
+						{
+							if (GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
+							{
+								if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+								{
+									if (type == CardType.spell)
+									{
+										SpawnSpell(hit);
+									}
+								}
+							}
+						}
+					}
+
 					if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
 					{
 						if (type == CardType.spell)
@@ -138,21 +180,24 @@ public class CardLogic : NetworkBehaviour
 				//******************** DISCARD ********************
 				if (bhit.transform.name.Contains("Cycling"))
 				{
-					//find next empty slot in grave
-					for (int x = 0; x < GameObject.FindObjectOfType<Deck>().graveyard.Length; x++)
+					if (bhit.transform.GetComponent<Building>().isMine)
 					{
-						if (GameObject.FindObjectOfType<Deck>().graveyard[x] == null)
+						//find next empty slot in grave
+						for (int x = 0; x < GameObject.FindObjectOfType<Deck>().graveyard.Length; x++)
 						{
-							GameObject.FindObjectOfType<Deck>().graveyard[x] = GameObject.FindObjectOfType<Deck>().hand[ID];
-							break;
+							if (GameObject.FindObjectOfType<Deck>().graveyard[x] == null)
+							{
+								GameObject.FindObjectOfType<Deck>().graveyard[x] = GameObject.FindObjectOfType<Deck>().hand[ID];
+								break;
+							}
 						}
+
+						GameObject.FindObjectOfType<Deck>().hand[ID] = null;
+						GameObject.FindObjectOfType<Sliders>().mana.value -= cycleCost;
+
+						GameObject.FindObjectOfType<Deck>().DrawCard();
+						Destroy(gameObject);
 					}
-
-					GameObject.FindObjectOfType<Deck>().hand[ID] = null;
-					GameObject.FindObjectOfType<Sliders>().mana.value -= 10;
-
-					GameObject.FindObjectOfType<Deck>().DrawCard();
-					Destroy(gameObject);
 				}
 			}
 

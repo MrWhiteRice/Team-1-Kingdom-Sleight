@@ -248,8 +248,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkPlayer: 0
   isMain: 0
+  isMine: 0
   manaBuff: 0
-  cardBuff: 1
+  cardBuff: 5
   pID: 
 --- !u!114 &114774095865427878
 MonoBehaviour:

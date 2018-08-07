@@ -8,7 +8,7 @@ public class Building : NetworkBehaviour
 	public bool checkPlayer;
 	public bool isMain;
 
-	bool isMine;
+	public bool isMine;
 
 	public float manaBuff;
 	public float cardBuff;

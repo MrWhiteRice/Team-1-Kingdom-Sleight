@@ -62,7 +62,7 @@ public class Deck : MonoBehaviour
 
 	public void DrawCard()
 	{
-		if(usingCards.Length <= 0)
+		if(usingCards.Length <= 0 || usingCards[0] == null)
 		{
 			MoveGrave();
 			return;

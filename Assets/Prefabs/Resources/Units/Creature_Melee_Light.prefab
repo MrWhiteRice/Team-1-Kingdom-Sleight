@@ -378,6 +378,7 @@ MonoBehaviour:
   position: 0
   baseSpeed: 3
   slowCounts: 0
+  slowSpeed: 6
   main: 0
   lane: 0
 --- !u!114 &114525820676238944

@@ -159,7 +159,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 4
+  m_Text: 2
 --- !u!114 &114135107487390898
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -240,7 +240,7 @@ MonoBehaviour:
   def: {fileID: 0}
   cmc: {fileID: 114112837631147668}
   cardName: Spell_Ice
-  cost: 40
+  cost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
   ID: 0
   type: 1

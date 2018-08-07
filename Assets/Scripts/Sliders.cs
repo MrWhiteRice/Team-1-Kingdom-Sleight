@@ -71,10 +71,7 @@ public class Sliders : MonoBehaviour
 				manaTimer = 1;
 			}
 		}
-	}
 
-	private void LateUpdate()
-	{
 		cardBuff = 0;
 		manaBuff = 0;
 	}
