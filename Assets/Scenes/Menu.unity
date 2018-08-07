@@ -2691,7 +2691,7 @@ MonoBehaviour:
   ipField: {fileID: 0}
   portField: {fileID: 0}
   existingPlayers: 0
-  canStart: 0
+  canStart: 1
 --- !u!4 &1923132558
 Transform:
   m_ObjectHideFlags: 0

@@ -15,9 +15,6 @@ public class CardPoint : MonoBehaviour
 
     private void Start()
     {
-        if (isPlayer)
-        {
-            //GetComponentInChildren<Renderer>().material.color = Color.red;
-        }
+        
     }
 }

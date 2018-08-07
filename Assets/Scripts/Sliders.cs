@@ -6,21 +6,24 @@ using UnityEngine.UI;
 
 public class Sliders : MonoBehaviour
 {
-    public Slider mana;
-    public Slider card;
-    public Slider playerHealth;
-    public Slider enemyHealth;
+	public Slider mana;
+	public Slider card;
+	public Slider playerHealth;
+	public Slider enemyHealth;
 
-	[HideInInspector]
-    public float cardGen = 3.5f;
-	[HideInInspector]
-    public float manaGen = 2.5f;
+	private float cardGen = 35f;
+	private float manaGen = 1f;
 
-	[HideInInspector]
-    public float cardBuff = 0f;
-	[HideInInspector]
-    public float manaBuff = 0f;
-    
+	public float cardBuff = 0f;
+	public float manaBuff = 0f;
+
+	float manaTimer;
+
+	void Start()
+	{
+		manaTimer = 1;
+	}
+
 	void Update()
     {
 		if (GameObject.FindObjectOfType<NetworkGameManager>().canStart)
@@ -49,12 +52,12 @@ public class Sliders : MonoBehaviour
 		}
     }
 
-	private void LateUpdate()
+	private void FixedUpdate()
 	{
 		if (GameObject.FindObjectOfType<NetworkGameManager>().canStart)
 		{
 			card.value += ((cardGen + cardBuff) * Time.deltaTime);
-			mana.value += ((manaGen + manaBuff) * Time.deltaTime);
+			manaTimer -= Time.deltaTime + ((manaGen+manaBuff) / 60);
 
 			if (card.value == 100)
 			{
@@ -62,8 +65,17 @@ public class Sliders : MonoBehaviour
 				card.value = 0;
 			}
 
-			cardBuff = 0;
-			manaBuff = 0;
+			if (manaTimer <= 0)
+			{
+				mana.value += 10;
+				manaTimer = 1;
+			}
 		}
+	}
+
+	private void LateUpdate()
+	{
+		cardBuff = 0;
+		manaBuff = 0;
 	}
 }

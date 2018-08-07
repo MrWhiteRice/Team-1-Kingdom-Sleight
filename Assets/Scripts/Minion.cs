@@ -20,6 +20,7 @@ public class Minion : NetworkBehaviour
 
 	public float baseSpeed;
 	public float slowCounts = 0;
+	public int slowSpeed = 3;
 
 	public bool main;
 
@@ -91,11 +92,11 @@ public class Minion : NetworkBehaviour
 		{
 			if (slowCounts <= 4)
 			{
-				GetComponentInChildren<Slider>().maxValue = baseSpeed + (3 * slowCounts);
+				GetComponentInChildren<Slider>().maxValue = baseSpeed + (slowSpeed * slowCounts);
 			}
 			else
 			{
-				GetComponentInChildren<Slider>().maxValue = baseSpeed + (3 * 4);
+				GetComponentInChildren<Slider>().maxValue = baseSpeed + (slowSpeed * 4);
 			}
 		}
 
