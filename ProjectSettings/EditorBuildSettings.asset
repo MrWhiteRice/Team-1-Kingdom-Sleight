@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/LB_Forest Level.unity
     guid: 867e3be231d512147bb450a5de8bf137
   - enabled: 1
+    path: Assets/Scenes/LB_Mountain Level.unity
+    guid: 1d656397936ef0048888134d62a8f065
+  - enabled: 1
     path: Assets/Scenes/Win.unity
     guid: 5d06d5882c6507f4fa7da5b38764d08c
   - enabled: 1

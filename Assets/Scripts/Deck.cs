@@ -35,11 +35,6 @@ public class Deck : MonoBehaviour
 	public void GenerateHand()
 	{
 		hand = new GameObject[6];
-
-		for(int x = 0; x < 3; x++)
-		{
-			DrawCard();
-		}
 	}
 
 	public void MoveGrave()

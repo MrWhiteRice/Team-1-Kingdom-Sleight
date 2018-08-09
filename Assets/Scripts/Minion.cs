@@ -102,7 +102,7 @@ public class Minion : NetworkBehaviour
 
 		if (moveTile != null)
         {
-            transform.position = Vector3.Lerp(transform.position, moveTile.transform.position - transform.forward * 0.25f, Time.deltaTime * 2);
+			transform.position = Vector3.Lerp(transform.position, moveTile.transform.position - transform.forward * 0.25f, Time.deltaTime * 2);
         }
 
         if (GetComponentInChildren<Slider>().value == GetComponentInChildren<Slider>().maxValue)
@@ -187,6 +187,20 @@ public class Minion : NetworkBehaviour
 			{
 				DealDamage(damage);
 			}
+			if(position == 1)
+			{
+				for (int i = 0; i < tiles.Length; i++)
+				{
+					if (lane.ToString() == "Middle")
+					{
+						print("correctlane");
+						if(GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID == pID)
+						{
+							GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSetPoint();
+						}
+					}
+				}
+			}
 		}
 		else
 		{
@@ -197,7 +211,15 @@ public class Minion : NetworkBehaviour
 		}
 	}
 
-    private void OnTriggerStay(Collider other)
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.name.Contains("Spell_Fire"))
+		{
+			health -= 40;
+		}
+	}
+
+	private void OnTriggerStay(Collider other)
     {
         if (other.name.Contains("Spell_Ice"))
         {

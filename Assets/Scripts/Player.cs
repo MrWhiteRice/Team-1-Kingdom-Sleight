@@ -37,20 +37,17 @@ public class Player : NetworkBehaviour
             return;
         }
 
-		//a p g backspace alt
-		if (Input.GetKey(KeyCode.A))
+		if (Input.GetMouseButtonDown(1))
 		{
-			if (Input.GetKey(KeyCode.P))
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast(ray, out hit))
 			{
-				if (Input.GetKey(KeyCode.G))
+				if (hit.transform.GetComponent<Building>())
 				{
-					if (Input.GetKey(KeyCode.L))
+					if (hit.transform.GetComponent<Building>().isMine)
 					{
-						if (Input.GetKeyDown(KeyCode.Alpha0))
-						{
-							GameObject.FindObjectOfType<Sliders>().mana.value = 100;
-							GameObject.FindObjectOfType<Sliders>().card.value = 100;
-						}
+						CmdDestroyBuilding(hit.transform.gameObject);
 					}
 				}
 			}
@@ -77,6 +74,20 @@ public class Player : NetworkBehaviour
 		}
 	}
 
+	//set capture logic
+	[Command]
+	public void CmdSetPoint()
+	{
+		if(isMain)
+		{
+			GameObject.FindObjectOfType<CapturePoint>().host = true;
+		}
+		else
+		{
+			GameObject.FindObjectOfType<CapturePoint>().client = true;
+		}
+	}
+
 	//deals damage
 	[Command]
 	public void CmdDealDamage(int damage, GameObject player)
@@ -87,6 +98,17 @@ public class Player : NetworkBehaviour
 		}
 
 		player.GetComponent<Player>().RpcTakeDamage(damage);
+	}
+
+	//deletes building
+	[Command]
+	public void CmdDestroyBuilding(GameObject building)
+	{
+		if (!isServer)
+		{
+			return;
+		}
+		NetworkServer.Destroy(building);
 	}
 
 	//takes damage

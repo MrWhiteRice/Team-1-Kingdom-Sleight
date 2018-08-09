@@ -11,8 +11,10 @@ public class Sliders : MonoBehaviour
 	public Slider playerHealth;
 	public Slider enemyHealth;
 
-	private float cardGen = 35f;
-	private float manaGen = 1f;
+	public Text manaIndicator;
+
+	private float cardGen = 20f;
+	private float manaGen = 0.5f;
 
 	public float cardBuff = 0f;
 	public float manaBuff = 0f;
@@ -26,6 +28,8 @@ public class Sliders : MonoBehaviour
 
 	void Update()
     {
+		manaIndicator.text = (mana.value / 10) + "";
+
 		if (GameObject.FindObjectOfType<NetworkGameManager>().canStart)
 		{
 			if (GameObject.FindGameObjectWithTag("MyPlayer"))
@@ -34,7 +38,8 @@ public class Sliders : MonoBehaviour
 
 				if(playerHealth.value <= 0)
 				{
-					SceneManager.LoadScene("Lose", LoadSceneMode.Single);
+					GameObject.FindObjectOfType<NetworkGameManager>().StartCoroutine("EndGame", "Lose");
+					//SceneManager.LoadScene("Lose", LoadSceneMode.Single);
 					//NetworkGameManager.Disconnect();
 				}
 			}
@@ -45,12 +50,19 @@ public class Sliders : MonoBehaviour
 
 				if(enemyHealth.value <= 0)
 				{
-					SceneManager.LoadScene("Win", LoadSceneMode.Single);
+					GameObject.FindObjectOfType<NetworkGameManager>().StartCoroutine("EndGame", "Win");
+					//SceneManager.LoadScene("Win", LoadSceneMode.Single);
 					//etworkGameManager.Disconnect();
 				}
 			}
 		}
     }
+
+	public void Buff()
+	{
+		manaBuff += 0.5f;
+		cardBuff += 0.5f;
+	}
 
 	private void FixedUpdate()
 	{

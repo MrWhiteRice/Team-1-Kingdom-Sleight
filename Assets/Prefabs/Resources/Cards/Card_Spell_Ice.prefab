@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Text: 'Ice Spell
 
 
-    Slows target tile reducing movement speed of units by 2'
+    Slows target tile reducing movement speed of units'
 --- !u!114 &114925527860435236
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -240,7 +240,8 @@ MonoBehaviour:
   def: {fileID: 0}
   cmc: {fileID: 114112837631147668}
   cardName: Spell_Ice
-  cost: 20
+  cost: 0
+  cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
   ID: 0
   type: 1

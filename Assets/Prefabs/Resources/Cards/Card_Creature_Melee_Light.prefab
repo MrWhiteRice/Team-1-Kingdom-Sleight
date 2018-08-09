@@ -165,6 +165,7 @@ MonoBehaviour:
   cmc: {fileID: 114287257978286062}
   cardName: Creature_Melee_Light
   cost: 20
+  cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
   ID: 0
   type: 0
@@ -260,10 +261,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Light Melee Creature
-
-
-    dont lewd me'
+  m_Text: Light Melee Creature
 --- !u!114 &114741779289835686
 MonoBehaviour:
   m_ObjectHideFlags: 1

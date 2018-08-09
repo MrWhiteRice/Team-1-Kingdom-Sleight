@@ -16,7 +16,8 @@ public class NetworkGameManager : NetworkManager
 
 	int currentSceneID;
 
-	bool mapLoaded;
+	public bool mapLoaded;
+	public bool endLoaded;
 
 	public int existingPlayers = 0;
 	public bool canStart;
@@ -32,6 +33,8 @@ public class NetworkGameManager : NetworkManager
 
 		print("Hosting Game with ip: " + ip + " and port: " + port + "!");
 
+		Init();
+
 		NetworkManager.singleton.StartHost();
 	}
 
@@ -45,6 +48,8 @@ public class NetworkGameManager : NetworkManager
 		PlayerPrefs.SetString("ip", ip);
 
 		print("Joining Game with ip: " + ip + " and port: " + port + "!");
+
+		Init();
 
 		NetworkManager.singleton.StartClient();
 	}
@@ -115,15 +120,30 @@ public class NetworkGameManager : NetworkManager
 		//game
 		else
 		{
-			if(GameObject.FindObjectOfType<Player>())
+			if (GameObject.FindObjectOfType<Player>())
 			{
 				existingPlayers = GameObject.FindObjectsOfType<Player>().Length;
 
 				if (existingPlayers > 1)
 				{
 					canStart = true;
+					print("MATCH STARTED~");
 					Object.Destroy(GameObject.Find("Match Blocker"));
 				}
+			}
+			else
+			{
+				existingPlayers = 0;
+			}
+		}
+
+		//if p disconnects mid game
+		if (canStart)
+		{
+			if(existingPlayers < 2 && !endLoaded)
+			{
+				StartCoroutine(EndGame("Win"));
+				endLoaded = true;
 			}
 		}
 	}
@@ -144,14 +164,45 @@ public class NetworkGameManager : NetworkManager
 		{
 			print("Not menu: " + scene.buildIndex);
 
+			//load random map
 			if (!mapLoaded)
 			{
-				SceneManager.LoadScene(2, LoadSceneMode.Additive);
+				int rand = Random.Range(0, 3);
+
+				switch (rand)
+				{
+					case 0:
+						SceneManager.LoadScene(2, LoadSceneMode.Additive);
+						break;
+					case 1:
+						SceneManager.LoadScene(3, LoadSceneMode.Additive);
+						break;
+					case 2:
+						SceneManager.LoadScene(4, LoadSceneMode.Additive);
+						break;
+				}
+
 				mapLoaded = true;
 			}
 
 			//InitDisconnect();
 		}
+	}
+
+	IEnumerator EndGame(string con)
+	{
+		GetComponent<NetworkGameManager>().offlineScene = con;
+
+		yield return new WaitForSeconds(0.1f);
+
+		Disconnect();
+	}
+
+	private void Init()
+	{
+		canStart = false;
+		mapLoaded = false;
+		endLoaded = false;
 	}
 
 	public static void Disconnect()

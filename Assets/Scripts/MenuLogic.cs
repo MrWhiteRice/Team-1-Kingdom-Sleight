@@ -13,11 +13,8 @@ public class MenuLogic : NetworkBehaviour
 
 	public void ReturnToMenu()
 	{
-		if(NetworkManager.singleton.IsClientConnected())
-		{
-			//SceneManager.LoadScene(0, LoadSceneMode.Single);
-			NetworkGameManager.Disconnect();
-		}
+		GameObject.FindObjectOfType<NetworkGameManager>().offlineScene = SceneManager.GetSceneAt(0).name;
+		SceneManager.LoadScene(0, LoadSceneMode.Single);
 	}
 
 	public void Join()

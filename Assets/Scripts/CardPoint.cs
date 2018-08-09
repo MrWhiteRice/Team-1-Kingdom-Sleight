@@ -12,9 +12,4 @@ public class CardPoint : MonoBehaviour
 
 	public bool isPlayer;
 	public int buildID;
-
-    private void Start()
-    {
-        
-    }
 }

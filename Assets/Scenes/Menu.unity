@@ -2631,6 +2631,7 @@ MonoBehaviour:
   - {fileID: 1263100446662184, guid: 6c381034600d5794d8d8e911c2da8aa4, type: 2}
   - {fileID: 1193627652039132, guid: 60a6e963caa791c4b90aff354ed32a2f, type: 2}
   - {fileID: 1885533990352602, guid: 5f7927bea05c7fb4ebebbfa8994f6cb7, type: 2}
+  - {fileID: 1885533990352602, guid: eaf430bd76481c14cb0ae1058af6e026, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 2
   m_ConnectionConfig:
@@ -2690,8 +2691,10 @@ MonoBehaviour:
   ip: localhost
   ipField: {fileID: 0}
   portField: {fileID: 0}
+  mapLoaded: 0
+  endLoaded: 0
   existingPlayers: 0
-  canStart: 1
+  canStart: 0
 --- !u!4 &1923132558
 Transform:
   m_ObjectHideFlags: 0
