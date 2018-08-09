@@ -118,10 +118,8 @@ public class Minion : NetworkBehaviour
         RaycastHit hit;
         if (Physics.Raycast(new Ray(transform.position + (Vector3.up*0.25f), transform.forward), out hit, 1.5f))
         {
-            print("123123123123" + hit.transform.name);
             if (hit.transform.name.Contains("Creature"))
             {
-                print("Fightin!");
 				hit.transform.GetComponent<Minion>().health -= damage;
                 return;
             }
@@ -132,7 +130,6 @@ public class Minion : NetworkBehaviour
         }
         else//else | move
         {
-            print("No Enemy Found, Moving!");
             Move();
         }
     }
@@ -153,12 +150,58 @@ public class Minion : NetworkBehaviour
 		//find all tiles
 		MoveTile[] tiles = GameObject.FindObjectsOfType<MoveTile>();
 
+		if (main)
+		{
+			if (position == 4)
+			{
+				DealDamage(damage);
+			}
+			
+			if(position == 1)
+			{
+				for (int i = 0; i < tiles.Length; i++)
+				{
+					if (lane.ToString() == tiles[i].lane.ToString())
+					{
+						print(lane.ToString());
+						if(lane.ToString() == "middle")
+						{
+							print("reeee host");
+							GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().RpcSetPoint("Host");
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if(position == 1)
+			{
+				for (int i = 0; i < tiles.Length; i++)
+				{
+					if (lane.ToString() == tiles[i].lane.ToString())
+					{
+						print(lane.ToString());
+						if(lane.ToString() == "middle")
+						{
+							print("reee middle");
+							GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().RpcSetPoint("Client");
+						}
+					}
+				}
+			}
+
+			if (position == -2)
+			{
+				DealDamage(damage);
+			}
+		}
+
 		//cycle through them
 		for (int i = 0; i < tiles.Length; i++)
 		{
 			if (lane.ToString() == tiles[i].lane.ToString())
 			{
-				print("correctlane");
 				if (tiles[i].position == position)
 				{
 					moveTile = tiles[i].gameObject;
@@ -181,34 +224,7 @@ public class Minion : NetworkBehaviour
 			}
 		}
 
-		if (main)
-		{
-			if (position == 4)
-			{
-				DealDamage(damage);
-			}
-			if(position == 1)
-			{
-				for (int i = 0; i < tiles.Length; i++)
-				{
-					if (lane.ToString() == "Middle")
-					{
-						print("correctlane");
-						if(GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID == pID)
-						{
-							GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSetPoint();
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			if (position == -2)
-			{
-				DealDamage(damage);
-			}
-		}
+		
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -223,7 +239,6 @@ public class Minion : NetworkBehaviour
     {
         if (other.name.Contains("Spell_Ice"))
         {
-			print("slowing down");
 			iceObject = other.transform.gameObject;
 
 			if (slowCounts <= 4)

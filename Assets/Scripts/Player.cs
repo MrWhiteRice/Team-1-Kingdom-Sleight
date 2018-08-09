@@ -75,16 +75,21 @@ public class Player : NetworkBehaviour
 	}
 
 	//set capture logic
-	[Command]
-	public void CmdSetPoint()
+	[ClientRpc]
+	public void RpcSetPoint(string type)
 	{
-		if(isMain)
+		print(type);
+		if(type == "Host")
 		{
+			print("host");
 			GameObject.FindObjectOfType<CapturePoint>().host = true;
+			GameObject.FindObjectOfType<CapturePoint>().client = false;
 		}
-		else
+		if(type == "Client")
 		{
+			print("client");
 			GameObject.FindObjectOfType<CapturePoint>().client = true;
+			GameObject.FindObjectOfType<CapturePoint>().host = false;
 		}
 	}
 

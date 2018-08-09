@@ -127,7 +127,6 @@ public class NetworkGameManager : NetworkManager
 				if (existingPlayers > 1)
 				{
 					canStart = true;
-					print("MATCH STARTED~");
 					Object.Destroy(GameObject.Find("Match Blocker"));
 				}
 			}

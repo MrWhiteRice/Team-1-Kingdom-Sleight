@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/LB_Mountain Level.unity
     guid: 1d656397936ef0048888134d62a8f065
   - enabled: 1
+    path: Assets/Scenes/LB_Swamp Level.unity
+    guid: 34cc7e62e8954054982f4e00dcc83d36
+  - enabled: 1
     path: Assets/Scenes/Win.unity
     guid: 5d06d5882c6507f4fa7da5b38764d08c
   - enabled: 1
