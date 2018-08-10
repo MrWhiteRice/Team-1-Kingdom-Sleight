@@ -243,7 +243,7 @@ MonoBehaviour:
   cost: 0
   cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
-  ID: 0
+  ID: 3
   type: 1
 --- !u!222 &222079652546555056
 CanvasRenderer:

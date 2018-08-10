@@ -14,6 +14,9 @@ public class Player : NetworkBehaviour
 	[SyncVar]
 	public string pID;
 
+	[SyncVar]
+	public int handSize = 0;
+
     public string placedBuilding = "";
     public Slider healthbar;
 
@@ -52,6 +55,15 @@ public class Player : NetworkBehaviour
 				}
 			}
 		}
+
+		handSize = FindObjectOfType<Deck>().HandSize();
+
+		CmdTellCards(gameObject, handSize);
+
+		if (GameObject.FindGameObjectWithTag("EnemyPlayer"))
+		{
+			GameObject.Find("OpponentHandSize").GetComponent<Text>().text = GameObject.FindGameObjectWithTag("EnemyPlayer").GetComponent<Player>().handSize.ToString();
+		}
 	}
 
 	public override void OnStartLocalPlayer()
@@ -72,6 +84,12 @@ public class Player : NetworkBehaviour
 			GameObject.Find("Main Camera").SetActive(false);
 			isMain = false;
 		}
+	}
+
+	[Command]
+	public void CmdTellCards(GameObject player, int size)
+	{
+		player.GetComponent<Player>().handSize = size;
 	}
 
 	//set capture logic
