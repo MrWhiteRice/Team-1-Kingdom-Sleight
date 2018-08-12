@@ -22,6 +22,9 @@ public class Player : NetworkBehaviour
 
 	public bool isMain;
 
+	public AudioClip spell_sound;
+	public AudioClip minion_sound;
+
 	void Start()
 	{
 		if(isLocalPlayer)
@@ -159,8 +162,10 @@ public class Player : NetworkBehaviour
 		print(main);
 		a.GetComponent<Minion>().main = main;
 
-        //spawn it on the network
-        NetworkServer.Spawn(a);
+		GameObject.FindObjectOfType<SoundsManager>().PlaySound(minion_sound);
+
+		//spawn it on the network
+		NetworkServer.Spawn(a);
     }
 
 	[Command]
@@ -171,6 +176,8 @@ public class Player : NetworkBehaviour
 
 		a.transform.position = pos;
 		a.transform.eulerAngles = rot;
+
+		GameObject.FindObjectOfType<SoundsManager>().PlaySound(spell_sound);
 
         //spawn it on the network
         NetworkServer.Spawn(a);

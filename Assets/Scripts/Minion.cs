@@ -26,6 +26,8 @@ public class Minion : NetworkBehaviour
 
 	GameObject iceObject;
 
+	public AudioClip die_Sound;
+
 	public enum Lane
     {
         left,
@@ -33,6 +35,14 @@ public class Minion : NetworkBehaviour
         right
     };
     public Lane lane;
+
+	public enum Type
+	{
+		Melee,
+		Ranged
+	}
+
+	public Type type;
 
     private void Start()
     {
@@ -114,7 +124,13 @@ public class Minion : NetworkBehaviour
 
     void CheckAction()
     {
-        //raycast forward | if hit object is less than 1 unit away | attack
+		//test type (ranged and melee)
+
+		//raycast forward grabbing all objects | cycle through all finding opponents less than 2 units away | attack
+
+
+
+        //raycast forward | if hit object is less than 1 unit away | attack (melee)
         RaycastHit hit;
         if (Physics.Raycast(new Ray(transform.position + (Vector3.up*0.25f), transform.forward), out hit, 1.5f))
         {
@@ -263,6 +279,7 @@ public class Minion : NetworkBehaviour
 
 	void Die()
 	{
+		GameObject.FindObjectOfType<SoundsManager>().PlaySound(die_Sound);
 		NetworkServer.Destroy(this.gameObject);
 	}
 

@@ -281,9 +281,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   pID: 
+  handSize: 0
   placedBuilding: 
   healthbar: {fileID: 114791610331304528}
   isMain: 0
+  spell_sound: {fileID: 8300000, guid: 6e341359856fbc34ebf5a6756b3d52b0, type: 3}
+  minion_sound: {fileID: 8300000, guid: 26d839ac80f207543ad53814eedc361b, type: 3}
 --- !u!114 &114791610331304528
 MonoBehaviour:
   m_ObjectHideFlags: 1
