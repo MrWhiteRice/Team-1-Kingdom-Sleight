@@ -24,7 +24,8 @@ public class CardLogic : NetworkBehaviour
 	public enum CardType
 	{
 		creature,
-		spell
+		spell,
+		buliding
 	};
 	public CardType type;
 
@@ -79,7 +80,7 @@ public class CardLogic : NetworkBehaviour
 			spawnedCard.GetComponent<WorldCard>().attack.text = att.text;
 			spawnedCard.GetComponent<WorldCard>().health.text = def.text;
 		}
-		else if(type == CardType.spell)
+		else if(type == CardType.spell || type == CardType.buliding)
 		{
 			//set data
 			spawnedCard.GetComponent<WorldCard>().desc_spell.text = text.text;
@@ -171,6 +172,37 @@ public class CardLogic : NetworkBehaviour
 						}
 					}
 				}
+
+				//******************** Building ********************
+				if (hit.transform.GetComponent<BuildPoint>())
+				{
+					if (hit.transform.GetComponent<BuildPoint>().isPlayer)
+					{
+						if (GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
+						{
+							if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+							{
+								if (type == CardType.buliding)
+								{
+									SpawnBuilding(hit);
+								}
+							}
+						}
+					}
+					else if (hit.transform.GetComponent<BuildPoint>().isPlayer == false)
+					{
+						if (GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain == false)
+						{
+							if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+							{
+								if (type == CardType.buliding)
+								{
+									SpawnBuilding(hit);
+								}
+							}
+						}
+					}
+				}
 			}
 
 			Ray bray = new Ray(spawnedCard.transform.position + (Vector3.up * 2), Vector3.down);
@@ -241,6 +273,32 @@ public class CardLogic : NetworkBehaviour
 
 		//spawn spell
 		GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSpawnMinion(hit.transform.position, hit.transform.eulerAngles, cardName, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain);
+	}
+
+	void SpawnBuilding(RaycastHit hit)
+	{
+		//set position
+		Vector3 spawnPoint = hit.transform.position;
+		spawnPoint.y = hit.point.y;
+
+		//minus cost | clean up
+		GameObject.FindObjectOfType<Sliders>().mana.value -= cost;
+
+		//find next empty slot in grave
+		for (int x = 0; x < GameObject.FindObjectOfType<Deck>().graveyard.Length; x++)
+		{
+			if (GameObject.FindObjectOfType<Deck>().graveyard[x] == null)
+			{
+				GameObject.FindObjectOfType<Deck>().graveyard[x] = GameObject.FindObjectOfType<Deck>().hand[ID];
+				break;
+			}
+		}
+
+		Destroy(gameObject);
+		GameObject.FindObjectOfType<Deck>().hand[ID] = null;
+
+		//spawn spell
+		GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSpawnBuilding(cardName, spawnPoint, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID);
 	}
 
 	void SpawnSpell(RaycastHit hit)

@@ -100,7 +100,7 @@ MonoBehaviour:
   cost: 30
   cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
-  ID: 0
+  ID: 2
   type: 1
 --- !u!114 &114473845733897144
 MonoBehaviour:

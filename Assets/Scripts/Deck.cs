@@ -24,12 +24,36 @@ public class Deck : MonoBehaviour
 
 	public void GenerateNewDeck(int length)
 	{
+		string ass = PlayerPrefs.GetString("Deck");
+
+		string[] split = ass.Split(","[0]);
+
 		usingCards = new GameObject[length];
 
-		for(int x = 0; x < cards.Length; x++)
+		//cycle 20-21
+		for (int i = 0; i < split.Length; i++)
+		{
+			if (split[i] != "")
+			{
+				Object[] loadedCards = Resources.LoadAll("Cards/", typeof(GameObject));
+				for (int x = 0; x < loadedCards.Length; x++)
+				{
+					GameObject boi = (GameObject)loadedCards[x];
+					if (boi.GetComponent<CardLogic>().ID.ToString() == split[i])
+					{
+						print("Ree" + boi.GetComponent<CardLogic>().ID.ToString() + "," + split[i]);
+						usingCards[i] = boi;
+					}
+				}
+			}
+		}
+
+		//usingCards = new GameObject[length];
+
+		/*for(int x = 0; x < cards.Length; x++)
 		{
 			usingCards[x] = cards[x];
-		}
+		}*/
 	}
 
 	public void GenerateHand()
@@ -134,5 +158,20 @@ public class Deck : MonoBehaviour
 				return;
 			}
 		}
+	}
+
+	public int HandSize()
+	{
+		int size = 0;
+
+		for(int x = 0; x < hand.Length; x++)
+		{
+			if(hand[x] != null)
+			{
+				size++;
+			}
+		}
+
+		return size;
 	}
 }

@@ -208,8 +208,9 @@ MonoBehaviour:
   cmc: {fileID: 114963668048639246}
   cardName: Spell_Lightning
   cost: 50
+  cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
-  ID: 0
+  ID: 4
   type: 1
 --- !u!114 &114963668048639246
 MonoBehaviour:

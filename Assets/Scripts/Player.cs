@@ -14,10 +14,16 @@ public class Player : NetworkBehaviour
 	[SyncVar]
 	public string pID;
 
+	[SyncVar]
+	public int handSize = 0;
+
     public string placedBuilding = "";
     public Slider healthbar;
 
 	public bool isMain;
+
+	public AudioClip spell_sound;
+	public AudioClip minion_sound;
 
 	void Start()
 	{
@@ -52,6 +58,15 @@ public class Player : NetworkBehaviour
 				}
 			}
 		}
+
+		handSize = FindObjectOfType<Deck>().HandSize();
+
+		CmdTellCards(gameObject, handSize);
+
+		if (GameObject.FindGameObjectWithTag("EnemyPlayer"))
+		{
+			GameObject.Find("OpponentHandSize").GetComponent<Text>().text = GameObject.FindGameObjectWithTag("EnemyPlayer").GetComponent<Player>().handSize.ToString();
+		}
 	}
 
 	public override void OnStartLocalPlayer()
@@ -72,6 +87,12 @@ public class Player : NetworkBehaviour
 			GameObject.Find("Main Camera").SetActive(false);
 			isMain = false;
 		}
+	}
+
+	[Command]
+	public void CmdTellCards(GameObject player, int size)
+	{
+		player.GetComponent<Player>().handSize = size;
 	}
 
 	//set capture logic
@@ -141,8 +162,10 @@ public class Player : NetworkBehaviour
 		print(main);
 		a.GetComponent<Minion>().main = main;
 
-        //spawn it on the network
-        NetworkServer.Spawn(a);
+		GameObject.FindObjectOfType<SoundsManager>().PlaySound(minion_sound);
+
+		//spawn it on the network
+		NetworkServer.Spawn(a);
     }
 
 	[Command]
@@ -153,6 +176,8 @@ public class Player : NetworkBehaviour
 
 		a.transform.position = pos;
 		a.transform.eulerAngles = rot;
+
+		GameObject.FindObjectOfType<SoundsManager>().PlaySound(spell_sound);
 
         //spawn it on the network
         NetworkServer.Spawn(a);
