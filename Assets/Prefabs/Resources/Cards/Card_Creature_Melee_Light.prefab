@@ -167,6 +167,8 @@ MonoBehaviour:
   cost: 20
   cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
+  damage: 2
+  health: 4
   ID: 1
   type: 0
 --- !u!114 &114557099961721974

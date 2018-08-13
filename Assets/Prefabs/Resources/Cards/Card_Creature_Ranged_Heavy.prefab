@@ -200,6 +200,8 @@ MonoBehaviour:
   cost: 50
   cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
+  damage: 4
+  health: 4
   ID: 5
   type: 0
 --- !u!114 &114557841229309294
@@ -261,7 +263,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Heavy Melee Creature
+  m_Text: Heavy Ranged Creature
 --- !u!114 &114741779289835686
 MonoBehaviour:
   m_ObjectHideFlags: 1

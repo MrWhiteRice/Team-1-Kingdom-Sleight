@@ -19,6 +19,9 @@ public class CardLogic : NetworkBehaviour
 	public GameObject card;
 	public static GameObject spawnedCard;
 
+	public int damage;
+	public int health;
+
 	public int ID;
 
 	public enum CardType
@@ -32,6 +35,11 @@ public class CardLogic : NetworkBehaviour
 	private void Start()
 	{
 		cmc.text = "" + (cost/10);
+		if (att != null)
+		{
+			att.text = damage.ToString();
+			def.text = health.ToString();
+		}
 	}
 
 	void Update()
