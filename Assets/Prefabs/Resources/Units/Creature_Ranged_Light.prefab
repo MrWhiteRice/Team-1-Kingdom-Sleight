@@ -478,8 +478,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   pID: 
-  health: 40
-  damage: 20
+  health: 10
+  damage: 30
   position: 0
   baseSpeed: 3
   slowCounts: 0

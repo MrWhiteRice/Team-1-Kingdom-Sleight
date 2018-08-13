@@ -146,7 +146,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2
+  m_Text: 4
 --- !u!114 &114417573026000724
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -196,8 +196,8 @@ MonoBehaviour:
   att: {fileID: 114903448073453318}
   def: {fileID: 114195205220584736}
   cmc: {fileID: 114417573026000724}
-  cardName: Creature_Melee_Heavy
-  cost: 60
+  cardName: Creature_Ranged_Heavy
+  cost: 50
   cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
   ID: 5
@@ -341,7 +341,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 4
 --- !u!222 &222011841094909562
 CanvasRenderer:
   m_ObjectHideFlags: 1

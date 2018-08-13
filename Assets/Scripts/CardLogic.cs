@@ -180,11 +180,15 @@ public class CardLogic : NetworkBehaviour
 					{
 						if (GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain)
 						{
-							if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+							if (hit.transform.GetComponent<BuildPoint>().isBuilt == false)
 							{
-								if (type == CardType.buliding)
+								if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
 								{
-									SpawnBuilding(hit);
+									if (type == CardType.buliding)
+									{
+										hit.transform.GetComponent<BuildPoint>().isBuilt = true;
+										SpawnBuilding(hit, hit.transform.gameObject);
+									}
 								}
 							}
 						}
@@ -193,11 +197,15 @@ public class CardLogic : NetworkBehaviour
 					{
 						if (GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain == false)
 						{
-							if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
+							if (hit.transform.GetComponent<BuildPoint>().isBuilt == false)
 							{
-								if (type == CardType.buliding)
+								if (GameObject.FindObjectOfType<Sliders>().mana.value >= cost)
 								{
-									SpawnBuilding(hit);
+									if (type == CardType.buliding)
+									{
+										hit.transform.GetComponent<BuildPoint>().isBuilt = true;
+										SpawnBuilding(hit, hit.transform.gameObject);
+									}
 								}
 							}
 						}
@@ -210,7 +218,7 @@ public class CardLogic : NetworkBehaviour
 			if (Physics.Raycast(bray, out bhit))
 			{
 				//******************** DISCARD ********************
-				if (bhit.transform.name.Contains("Cycling"))
+				if (bhit.transform.name.Contains("Barracks"))
 				{
 					if (bhit.transform.GetComponent<Building>().isMine)
 					{
@@ -275,7 +283,7 @@ public class CardLogic : NetworkBehaviour
 		GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSpawnMinion(hit.transform.position, hit.transform.eulerAngles, cardName, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().isMain);
 	}
 
-	void SpawnBuilding(RaycastHit hit)
+	void SpawnBuilding(RaycastHit hit, GameObject pointBuilding)
 	{
 		//set position
 		Vector3 spawnPoint = hit.transform.position;
@@ -298,7 +306,7 @@ public class CardLogic : NetworkBehaviour
 		GameObject.FindObjectOfType<Deck>().hand[ID] = null;
 
 		//spawn spell
-		GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSpawnBuilding(cardName, spawnPoint, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID);
+		GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().CmdSpawnBuilding(cardName, spawnPoint, GameObject.FindGameObjectWithTag("MyPlayer").GetComponent<Player>().pID, pointBuilding);
 	}
 
 	void SpawnSpell(RaycastHit hit)

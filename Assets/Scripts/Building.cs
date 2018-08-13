@@ -13,6 +13,8 @@ public class Building : NetworkBehaviour
 	public float manaBuff;
 	public float cardBuff;
 
+	public GameObject point;
+
 	[SyncVar]
 	public string pID;
 

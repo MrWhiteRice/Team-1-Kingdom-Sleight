@@ -127,27 +127,51 @@ public class Minion : NetworkBehaviour
 		//test type (ranged and melee)
 
 		//raycast forward grabbing all objects | cycle through all finding opponents less than 2 units away | attack
+		if(type == Type.Ranged)
+		{
+			print("i am a ranged boi");
+			RaycastHit[] hits;
+			hits = Physics.RaycastAll(new Ray(transform.position + (Vector3.up*0.25f), transform.forward), 2.5f);
 
+			for (int x = 0; x < hits.Length; x++)
+			{
+				if (hits[x].transform.name.Contains("Creature"))
+				{
+					print("hit");
+					if(!hits[x].transform.GetComponent<Minion>().main)
+					{
+						print("re");
+						hits[x].transform.GetComponent<Minion>().health -= damage;
+					}
+					return;
+				}
+			}
 
+			print("r move");
+			Move();
+		}
 
-        //raycast forward | if hit object is less than 1 unit away | attack (melee)
-        RaycastHit hit;
-        if (Physics.Raycast(new Ray(transform.position + (Vector3.up*0.25f), transform.forward), out hit, 1.5f))
-        {
-            if (hit.transform.name.Contains("Creature"))
-            {
-				hit.transform.GetComponent<Minion>().health -= damage;
-                return;
-            }
-			else
+		if(type == Type.Melee)
+		{
+			//raycast forward | if hit object is less than 1 unit away | attack (melee)
+			RaycastHit hit;
+			if (Physics.Raycast(new Ray(transform.position + (Vector3.up*0.25f), transform.forward), out hit, 1.5f))
+			{
+				if (hit.transform.name.Contains("Creature"))
+				{
+					hit.transform.GetComponent<Minion>().health -= damage;
+					return;
+				}
+				else
+				{
+					Move();
+				}
+			}
+			else//else | move
 			{
 				Move();
 			}
-        }
-        else//else | move
-        {
-            Move();
-        }
+		}
     }
 
     private void Move()

@@ -53,6 +53,7 @@ public class Player : NetworkBehaviour
 				{
 					if (hit.transform.GetComponent<Building>().isMine)
 					{
+						hit.transform.GetComponent<Building>().point.GetComponent<BuildPoint>().isBuilt = false;
 						CmdDestroyBuilding(hit.transform.gameObject);
 					}
 				}
@@ -185,14 +186,16 @@ public class Player : NetworkBehaviour
 
 	//tell server to spawn building
     [Command]
-    public void CmdSpawnBuilding(string name, Vector3 pos, string id)
+    public void CmdSpawnBuilding(string name, Vector3 pos, string id, GameObject point)
     {
 		//physically spawn the object
 		GameObject go = Instantiate((GameObject)Resources.Load("Buildings/" + name), pos, Quaternion.identity);
 
 		//go.GetComponent<Building>().id = point;
 		go.GetComponent<Building>().pID = id;
-		
+
+		go.GetComponent<Building>().point = point;
+
 		//setPosition
 		NetworkServer.SpawnWithClientAuthority(go, connectionToClient);
     }

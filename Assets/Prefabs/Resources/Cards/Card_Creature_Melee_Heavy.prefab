@@ -198,6 +198,7 @@ MonoBehaviour:
   cmc: {fileID: 114417573026000724}
   cardName: Creature_Melee_Heavy
   cost: 60
+  cycleCost: 20
   card: {fileID: 1872984145493152, guid: dc7a5972223e16046a91a374781ed139, type: 2}
   ID: 0
   type: 0
@@ -220,7 +221,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c726e7f221d2a7c4d92cf07a951657f2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e9d8d1e6316552d4ba99b6701ffcb966, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
