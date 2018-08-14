@@ -21,6 +21,8 @@ public class Sliders : MonoBehaviour
 
 	float manaTimer;
 
+	public GameObject[] manaBars;
+
 	void Start()
 	{
 		manaTimer = 1;
@@ -54,6 +56,18 @@ public class Sliders : MonoBehaviour
 					//SceneManager.LoadScene("Win", LoadSceneMode.Single);
 					//etworkGameManager.Disconnect();
 				}
+			}
+		}
+
+		for (int x = 0; x < manaBars.Length; x++)
+		{
+			if (x < ((mana.value / 10)))
+			{
+				manaBars[x].SetActive(true);
+			}
+			else
+			{
+				manaBars[x].SetActive(false);
 			}
 		}
     }
